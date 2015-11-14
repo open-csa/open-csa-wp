@@ -48,6 +48,12 @@ define("OPEN_CSA_WP_TABLE_DELIVERIES", $wpdb->prefix."open_csa_wp_deliveries");
 define("OPEN_CSA_WP_TABLE_PRODUCT_ORDERS", $wpdb->prefix."open_csa_wp_product_orders");
 define("OPEN_CSA_WP_TABLE_USER_ORDERS", $wpdb->prefix."open_csa_wp_user_orders");
 
+define("OPEN_CSA_WP_TABLE_WALLET_TYPE", $wpdb->prefix."open_csa_wp_wallet_type");
+define("OPEN_CSA_WP_TABLE_WALLET", $wpdb->prefix."open_csa_wp_wallet");
+define("OPEN_CSA_WP_TABLE_TRANSACTION_TYPE", $wpdb->prefix."open_csa_wp_transaction_type");
+define("OPEN_CSA_WP_TABLE_TRANSACTION", $wpdb->prefix."open_csa_wp_transaction");
+
+
 define("OPEN_CSA_WP_DATE_FORMAT", "Y-m-d");
 define("OPEN_CSA_WP_DATE_FORMAT_READABLE", "d-M-Y");
 
@@ -79,6 +85,7 @@ include 'open-csa-wp-db-tables.php';
 function open_csa_wp_activation() {
 	open_csa_wp_register_settings();
 	open_csa_wp_db_tables_creation();
+	open_csa_wp_db_tables_initialization();
 	open_csa_wp_pages_creation();
 }
 register_activation_hook( __FILE__, 'open_csa_wp_activation' );

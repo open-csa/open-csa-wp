@@ -95,12 +95,86 @@ function open_csa_wp_db_tables_creation () {
 		last_edit_datetime datetime DEFAULT NULL,
 		PRIMARY KEY  (delivery_id,user_id)
 	) $charset_collate;
+
+	CREATE TABLE ". OPEN_CSA_WP_TABLE_WALLET_TYPE ." (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		name varchar(50) NOT NULL,
+		PRIMARY KEY (id)
+	) $charset_collate;
+	
+	CEATE TABLE ". OPEN_CSA_WP_TABLE_WALLET ." (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		type_id int(11) NOT NULL,
+		user_id int(11) NOT NULL,
+		amount int(11)
+		PRIMARY KEY (id)
+	) $charset_collate;
+
+	CREATE TABLE ". OPEN_CSA_WP_TABLE_TRANSACTION_TYPE ." (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		name varchar(50) NOT NULL
+		PRIMARY KEY (id)
+	) $charset_collate;
+
+	CREATE TABLE ". OPEN_CSA_WP_TABLE_TRANSACTION ." (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		wallet_from_id int(11),
+		wallet_to_id int(11),
+		type_id int(11) NOT NULL,
+		description varchar(500),
+		amount int(11) NOT NULL,
+		order_id int(11)
+		PRIMARY KEY (id)
+	) $charset_collate;
+
+	
 	";
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 
 	update_option( 'open-csa-wp-db-version', '1.0' );
+}
+
+function open_csa_wp_db_tables_initialization () {
+	global $wpdb; 
+	
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_TRANSACTION_TYPE,
+		array ("deposit"),
+		array ('%s')
+	);
+	
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_TRANSACTION_TYPE,
+		array ("withdraw"),
+		array ('%s')	
+	);
+	
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_TRANSACTION_TYPE,
+		array ("transfer"),
+		array ('%s')	
+	);
+	
+	
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_WALLET_TYPE,
+		array ("user"),
+		array ('%s')	
+	);
+		
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_WALLET_TYPE,
+		array ("income"),
+		array ('%s')	
+	);
+
+	$wpdb->insert(
+		OPEN_CSA_WP_TABLE_WALLET_TYPE,
+		array ("repository"),
+		array ('%s')	
+	);	
 }
 
 /*	***************************
