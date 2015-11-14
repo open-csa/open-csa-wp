@@ -3,7 +3,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 /*	********************************
 	CREATION OF ADMINISTRATION PANEL
-	********************************	
+	********************************
 */
 
 if ( is_admin() ) { // admin actions
@@ -16,14 +16,14 @@ function open_csa_wp_menu() {
 	add_submenu_page( $parent_slug, __('Manage CSA Products', OPEN_CSA_WP_DOMAIN), __('Products',OPEN_CSA_WP_DOMAIN), 'manage_options', $parent_slug, 'open_csa_wp_products_menu_back_end');
 	add_submenu_page( $parent_slug, __('Manage CSA Spots',OPEN_CSA_WP_DOMAIN), __('Spots',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_spots_management', 'open_csa_wp_spots_menu');
 	add_submenu_page( $parent_slug, __('Manage CSA Deliveries',OPEN_CSA_WP_DOMAIN), __('Deliveries',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_deliveries_management', 'open_csa_wp_deliveries_menu');
-	add_submenu_page( $parent_slug, __('Manage CSA Orders',OPEN_CSA_WP_DOMAIN), __('Orders',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_orders_management', 'open_csa_wp_orders_menu_back_end');		
+	add_submenu_page( $parent_slug, __('Manage CSA Orders',OPEN_CSA_WP_DOMAIN), __('Orders',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_orders_management', 'open_csa_wp_orders_menu_back_end');
 	add_submenu_page( $parent_slug, __('Manage CSA Users',OPEN_CSA_WP_DOMAIN), __('Users',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_users_management', 'open_csa_wp_users_menu');
-
+    add_submenu_page( $parent_slug, __('Manage CSA Wallets',OPEN_CSA_WP_DOMAIN), __('Wallets',OPEN_CSA_WP_DOMAIN), 'manage_options', 'csa_wallets_management', 'open_csa_wp_wallets_menu');
 }
 
 /*	*************
 	PRODUCTS MENU
-	*************	
+	*************
 */
 
 
@@ -39,9 +39,9 @@ function open_csa_wp_products_menu($back_end_bool) {
 		} else {
 			echo "<h3>".__('Manage Products',OPEN_CSA_WP_DOMAIN)." </h3>";
 		}
-		
+
 		$redirection_url = open_csa_wp_get_redirection_url($back_end_bool, "csa_management");
-		
+
 		if (isset($_GET["id"])) {
 			open_csa_wp_show_new_product_form($_GET["id"], true, $redirection_url);
 		} else {
@@ -51,10 +51,10 @@ function open_csa_wp_products_menu($back_end_bool) {
 			} else {
 				open_csa_wp_show_new_product_category_form(false);
 				open_csa_wp_show_product_categories(false);
-				
+
 				if ($wpdb->get_var("SELECT COUNT(id) FROM " .OPEN_CSA_WP_TABLE_PRODUCTS) == 0) {
 					open_csa_wp_show_new_product_form(null, true, $redirection_url);
-				} else { 
+				} else {
 					open_csa_wp_show_new_product_form(null, false, $redirection_url);
 					open_csa_wp_show_products(true, $redirection_url);
 				}
@@ -66,7 +66,7 @@ function open_csa_wp_products_menu($back_end_bool) {
 
 /*	**********
 	SPOTS MENU
-	**********	
+	**********
 */
 
 function open_csa_wp_spots_menu() {
@@ -82,7 +82,7 @@ function open_csa_wp_spots_menu() {
 			open_csa_wp_spot_form(null, true);
 		} else {
 			open_csa_wp_spot_form(null, false);
-			open_csa_wp_show_spots();	
+			open_csa_wp_show_spots();
 		}
 		echo '</div>';
 	}
@@ -90,7 +90,7 @@ function open_csa_wp_spots_menu() {
 
 /*	***************
 	DELIVERIES MENU
-	***************	
+	***************
 */
 
 function open_csa_wp_deliveries_menu() {
@@ -100,7 +100,7 @@ function open_csa_wp_deliveries_menu() {
 		echo '<h2>'.__('CSA Management Panel',OPEN_CSA_WP_DOMAIN).'</h2>';
 
 		global $wpdb;
-		
+
 		if (open_csa_wp_delivery_spots_exist(false) === true) {
 			if (isset($_GET["id"])){
 				$spot_id = $_GET["id"];
@@ -114,14 +114,14 @@ function open_csa_wp_deliveries_menu() {
 				open_csa_wp_new_delivery_form($spot_id, $order_deadline_date, array(), $delivery_id, true);
 			}
 			else if (isset($_POST["open-csa-wp-newDelivery_spotID_choice"])) {
-				
+
 				$spot_id = $_POST["open-csa-wp-newDelivery_spotID_choice"];
-				
+
 				$custom_values = array();
 				if (isset($_POST["open-csa-wp-newDelivery_orderDeadlineDate_choice"])) {
 					$custom_values = open_csa_wp_return_custom_values_for_new_delivery($spot_id);
 				}
-				
+
 				$delivery_id = null;
 				if (isset($_POST["open-csa-wp-newDelivery_deliveryID_choice"])) {
 					$delivery_id = $_POST["open-csa-wp-newDelivery_deliveryID_choice"];
@@ -139,7 +139,7 @@ function open_csa_wp_deliveries_menu() {
 				open_csa_wp_show_deliveries(true);
 			}
 			else {
-				open_csa_wp_new_delivery_form(null, null, array(), null, true); 
+				open_csa_wp_new_delivery_form(null, null, array(), null, true);
 			}
 		}
 	}
@@ -147,7 +147,7 @@ function open_csa_wp_deliveries_menu() {
 
 /*	***********
 	ORDERS MENU
-	***********	
+	***********
 */
 
 function open_csa_wp_orders_menu_back_end() {open_csa_wp_orders_menu(true, false);}
@@ -174,14 +174,14 @@ function open_csa_wp_orders_menu($back_end_bool, $personal_order) {
 		}
 
 		$redirection_url = open_csa_wp_get_redirection_url($back_end_bool, "csa_orders_management");
-		
+
 		global $wpdb;
-		
+
 		if (open_csa_wp_delivery_spots_exist($personal_order) === true && open_csa_wp_delivery_products_exist($personal_order) === true) {
 			$user_id = null;
 			$spot_id = null;
 			$delivery_id = null;
-			
+
 			if (isset($_POST["open-csa-wp-showTotalOrdersOfDelivery_delivery_input"])) {
 				$delivery_id = $_POST["open-csa-wp-showTotalOrdersOfDelivery_delivery_input"];
 				if (isset($_POST["open-csa-wp-showTotalOrdersOfDelivery_producer_input"]))
@@ -198,41 +198,41 @@ function open_csa_wp_orders_menu($back_end_bool, $personal_order) {
 				} else if (isset($_POST["open-csa-wp-showNewOrderForm_user_input"])) {
 					$user_id = $_POST["open-csa-wp-showNewOrderForm_user_input"];
 				}
-				
+
 				if (isset($_POST["open-csa-wp-showSelectSpotForm_spot_input"])) {
 					$spot_id = $_POST["open-csa-wp-showSelectSpotForm_spot_input"];
 				}
-					
+
 				if (isset($_POST["open-csa-wp-showSelectSpotForm_delivery_input"])) {
 					$delivery_id = $_POST["open-csa-wp-showSelectSpotForm_delivery_input"];
 				}
-				
+
 				if ($user_id!=null && ($personal_order === false || $spot_id != null)) {
 					open_csa_wp_show_order_form($user_id, $spot_id, $delivery_id, true, $redirection_url, $personal_order);
-				} else { 
+				} else {
 					$show_new_order_form = open_csa_wp_active_deliveries_exist() === true ? true:false;
 					$show_orders = $wpdb->get_var("SELECT COUNT(*) FROM " .OPEN_CSA_WP_TABLE_USER_ORDERS) > 0 ? true:false;
-					
+
 					if ($show_orders === false && $show_new_order_form === true) {
 						open_csa_wp_show_order_form($user_id, $spot_id, $delivery_id, true, $redirection_url, $personal_order);
 					} else if ($show_orders === true) {
 						open_csa_wp_show_order_form($user_id, $spot_id, $delivery_id, false, $redirection_url, $personal_order);
-						
+
 						if($personal_order === false) {
 							open_csa_wp_show_all_user_orders(null, false);
 							open_csa_wp_show_delivery_orders_list ($user_id, false, true);
 						} else {
 							open_csa_wp_show_all_user_orders($user_id, true);
-							
-							$user_data = get_user_meta($user_id, 'open-csa-wp_user', true ); 
-							
+
+							$user_data = get_user_meta($user_id, 'open-csa-wp_user', true );
+
 							if ($user_data != null) {
-								if($user_data['role'] == "responsible" || $user_data['role'] == "administrator") { 
+								if($user_data['role'] == "responsible" || $user_data['role'] == "administrator") {
 									echo "<h3>".__('Total Orders of Deliveries You Are Responsible',OPEN_CSA_WP_DOMAIN)."</h3>";
-									open_csa_wp_show_delivery_orders_list ($user_id, false, true);	
+									open_csa_wp_show_delivery_orders_list ($user_id, false, true);
 								}
 								if ($user_data['type'] == "producer" || $user_data['type'] == "both") {
-									echo "<h3>".__('Your Total Orders per Delivery',OPEN_CSA_WP_DOMAIN)."</h3>";	
+									echo "<h3>".__('Your Total Orders per Delivery',OPEN_CSA_WP_DOMAIN)."</h3>";
 									open_csa_wp_show_delivery_orders_list ($user_id, true, true);
 								}
 							}
@@ -241,20 +241,20 @@ function open_csa_wp_orders_menu($back_end_bool, $personal_order) {
 				}
 			}
 		}
-		
+
 		echo '</div>';
 	}
 }
 
 /*	**********
 	USERS MENU
-	**********	
+	**********
 */
 
 function open_csa_wp_users_menu() {
 	if ( !current_user_can( 'administrator' ) &&
 		(!($csa_data = get_user_meta( $user->ID, 'open-csa-wp_user', true )) || $csa_data['role'] != "administrator" )
-	) {	
+	) {
 		wp_die( __( 'You do not have sufficient permissions to access this page.', OPEN_CSA_WP_DOMAIN ) );
 	}
 	?>

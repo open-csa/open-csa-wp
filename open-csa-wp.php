@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Open-CSA-WP
-Plugin URI:  
+Plugin URI:
 Description: Provides functionality required to run a CSA (Community Supported Agriculture) Team
 Version:     1.0
 Author:      Eleftherios Kosmas; Haris Papagianakis
-Author URI:  
+Author URI:
 License:     GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Domain Path: /languages
@@ -65,21 +65,21 @@ define("OPEN_CSA_WP_OPTIONS_GROUP", "open-csa-wp-options-group");
 */
 
 $days_of_week = array(
-					__("Monday", OPEN_CSA_WP_DOMAIN), 
-					__("Tuesday", OPEN_CSA_WP_DOMAIN), 
-					__("Wednesday", OPEN_CSA_WP_DOMAIN), 
-					__("Thursday", OPEN_CSA_WP_DOMAIN), 
-					__("Friday", OPEN_CSA_WP_DOMAIN), 
-					__("Saturday", OPEN_CSA_WP_DOMAIN), 
+					__("Monday", OPEN_CSA_WP_DOMAIN),
+					__("Tuesday", OPEN_CSA_WP_DOMAIN),
+					__("Wednesday", OPEN_CSA_WP_DOMAIN),
+					__("Thursday", OPEN_CSA_WP_DOMAIN),
+					__("Friday", OPEN_CSA_WP_DOMAIN),
+					__("Saturday", OPEN_CSA_WP_DOMAIN),
 					__("Sunday", OPEN_CSA_WP_DOMAIN)
 				);
 
-				
+
 /*	***************
 	ACTIVATION CODE
 	***************
 */
-				
+
 include 'open-csa-wp-db-tables.php';
 
 function open_csa_wp_activation() {
@@ -125,7 +125,7 @@ function open_csa_wp_pages_creation() {
 	// Insert the post into the database
 	$manage_products_page_id = wp_insert_post( $my_post );
 	update_option( 'open-csa-wp-manage-products-page', $manage_products_page_id );
-	
+
 	// Create post object
 	$my_post = array(
 	  'post_title'    	=> __('Manage User Orders', OPEN_CSA_WP_DOMAIN),
@@ -153,7 +153,7 @@ function open_csa_wp_pages_creation() {
 
 	// Insert the post into the database
 	$orders_page_id = wp_insert_post( $my_post );
-	update_option( 'open-csa-wp-orders-page', $orders_page_id );	
+	update_option( 'open-csa-wp-orders-page', $orders_page_id );
 }
 
 function open_csa_wp_enqueue_csa_scripts() {
@@ -162,8 +162,8 @@ function open_csa_wp_enqueue_csa_scripts() {
 	wp_register_script('open-csa-wp-spots-scripts', plugins_url('/open-csa-wp-spots.js', __FILE__));
 	wp_register_script('open-csa-wp-product-categories-scripts', plugins_url('/open-csa-wp-product-categories.js', __FILE__));
 	wp_register_script('open-csa-wp-products-scripts', plugins_url('/open-csa-wp-products.js', __FILE__));
-	wp_register_script('open-csa-wp-deliveries-scripts', plugins_url('/open-csa-wp-deliveries.js', __FILE__));	
-	wp_register_script('open-csa-wp-orders-scripts', plugins_url('/open-csa-wp-orders.js', __FILE__));	
+	wp_register_script('open-csa-wp-deliveries-scripts', plugins_url('/open-csa-wp-deliveries.js', __FILE__));
+	wp_register_script('open-csa-wp-orders-scripts', plugins_url('/open-csa-wp-orders.js', __FILE__));
 	wp_register_script('jquery.datatables', plugins_url('/deps/jquery.datatables.js', __FILE__) );
 	wp_register_script('jquery.jeditable', plugins_url('/deps/jquery.jeditable.js', __FILE__));
 	wp_register_script('jquery.blockui', plugins_url('/deps/jquery.blockui.js', __FILE__));
@@ -177,8 +177,8 @@ function open_csa_wp_enqueue_csa_scripts() {
 		'invalid_delivery_period_value' => __( "invalid delivery period! please fill in for end time some value", OPEN_CSA_WP_DOMAIN )
 	);
 	wp_localize_script( 'open-csa-wp-general-scripts', 'general_translation', $general_translation_array );
-	
-	
+
+
 	$spots_translation_array = array(
 		'tooltip_click_to_change' => __( "click to change...", OPEN_CSA_WP_DOMAIN ),
 		'placeholder_click_to_fill' => __( "click to fill ...", OPEN_CSA_WP_DOMAIN ),
@@ -200,9 +200,9 @@ function open_csa_wp_enqueue_csa_scripts() {
 
 	$products_translation_array = array(
 		'tooltip' => __( "click to change...", OPEN_CSA_WP_DOMAIN ),
-		'placeholder' => __( "click to fill ...", OPEN_CSA_WP_DOMAIN ),	
+		'placeholder' => __( "click to fill ...", OPEN_CSA_WP_DOMAIN ),
 		'yes' => __( "yes", OPEN_CSA_WP_DOMAIN ),
-		'no' => __( "no", OPEN_CSA_WP_DOMAIN ),	
+		'no' => __( "no", OPEN_CSA_WP_DOMAIN ),
 		'product_cannnot_be_deleted' => __( "You can not delete this product, since at least one order exists for it.", OPEN_CSA_WP_DOMAIN ),
 		'mark_available' => __( "mark it as available", OPEN_CSA_WP_DOMAIN ),
 		'mark_unavailable' => __( "mark it as unavailable", OPEN_CSA_WP_DOMAIN )
@@ -211,27 +211,27 @@ function open_csa_wp_enqueue_csa_scripts() {
 
 	$deliveries_translation_array = array(
 		'yes' => __( "yes", OPEN_CSA_WP_DOMAIN ),
-		'no' => __( "no", OPEN_CSA_WP_DOMAIN ),		
-		'grant_ability_to_order' => __( "grant ability to order", OPEN_CSA_WP_DOMAIN ),		
-		'remove_ability_to_order' => __( "remove ability to order", OPEN_CSA_WP_DOMAIN )	
+		'no' => __( "no", OPEN_CSA_WP_DOMAIN ),
+		'grant_ability_to_order' => __( "grant ability to order", OPEN_CSA_WP_DOMAIN ),
+		'remove_ability_to_order' => __( "remove ability to order", OPEN_CSA_WP_DOMAIN )
 	);
 	wp_localize_script( 'open-csa-wp-deliveries-scripts', 'deliveries_translation', $deliveries_translation_array );
 
 	$orders_translation_array = array(
 		'tooltip' => __( "click to change...", OPEN_CSA_WP_DOMAIN ),
-		'placeholder' => __( "click to fill ...", OPEN_CSA_WP_DOMAIN ),	
+		'placeholder' => __( "click to fill ...", OPEN_CSA_WP_DOMAIN ),
 		'product_quantity_cannnot_be_updated' => __( "You can not update the quantity of your product orders, since the order deadline has been reached for this delivery. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),
-		'total' => __( "Total", OPEN_CSA_WP_DOMAIN ),		
-		'empty_order' => __( "Your order is still empty...", OPEN_CSA_WP_DOMAIN ),		
-		'cannnot_add_or_update_order' => __( "You can not add new or upate your order for this delivery, since its order deadline has been reached. For any additional information, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),		
-		'cannnot_delete_product' => __( "You can not delete your product order, since the order deadline has been reached for this delivery. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),		
-		'cannnot_cancel_order' => __( "You can not cancel your product order, since the order deadline has been reached for this delivery. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),		
-		'cannnot_become_responsible' => __( "You can not become responsible, since another user is already. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),		
-		'' => __( "", OPEN_CSA_WP_DOMAIN ),		
+		'total' => __( "Total", OPEN_CSA_WP_DOMAIN ),
+		'empty_order' => __( "Your order is still empty...", OPEN_CSA_WP_DOMAIN ),
+		'cannnot_add_or_update_order' => __( "You can not add new or upate your order for this delivery, since its order deadline has been reached. For any additional information, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),
+		'cannnot_delete_product' => __( "You can not delete your product order, since the order deadline has been reached for this delivery. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),
+		'cannnot_cancel_order' => __( "You can not cancel your product order, since the order deadline has been reached for this delivery. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),
+		'cannnot_become_responsible' => __( "You can not become responsible, since another user is already. For any change, please contact either an administrator or the responsible for this delivery.", OPEN_CSA_WP_DOMAIN ),
+		'' => __( "", OPEN_CSA_WP_DOMAIN ),
 	);
 	wp_localize_script( 'open-csa-wp-orders-scripts', 'orders_translation', $orders_translation_array );
 
-	
+
 	wp_register_style('open-csa-wp-style', plugins_url('/open-csa-wp-style.css', __FILE__));
 	wp_enqueue_style('open-csa-wp-style');
 }
@@ -248,7 +248,7 @@ add_action( 'plugins_loaded', 'open_csa_wp_load_plugin_textdomain' );
 
 /*	********************************
 	CREATION OF ADMINISTRATION PANEL
-	********************************	
+	********************************
 */
 
 include 'open-csa-wp-users.php';
@@ -257,6 +257,7 @@ include 'open-csa-wp-products.php';
 include 'open-csa-wp-product-categories.php';
 include 'open-csa-wp-deliveries.php';
 include 'open-csa-wp-orders.php';
+include 'open-csa-wp-wallets.php';
 include 'open-csa-wp-administration-panel.php';
 
 
@@ -266,18 +267,18 @@ function open_csa_wp_deactivation() {
 	open_csa_wp_delete_pages();
 }
 
-function open_csa_wp_delete_pages() {	
+function open_csa_wp_delete_pages() {
 	wp_delete_post(get_option('open-csa-wp-manage-products-page'));
-	delete_option('open-csa-wp-manage-products-page');  
-	
+	delete_option('open-csa-wp-manage-products-page');
+
 	wp_delete_post(get_option('open-csa-wp-manage-orders-page'));
-	delete_option('open-csa-wp-manage-orders-page');  
+	delete_option('open-csa-wp-manage-orders-page');
 
 	wp_delete_post(get_option('open-csa-wp-administration-page'));
-	delete_option('open-csa-wp-administration-page');  	
-	
+	delete_option('open-csa-wp-administration-page');
+
 	wp_delete_post(get_option('open-csa-wp-orders-page'));
-	delete_option('open-csa-wp-orders-page');  
+	delete_option('open-csa-wp-orders-page');
 }
 
 register_uninstall_hook(__FILE__, 'open_csa_wp_uninstall');
@@ -289,8 +290,8 @@ function open_csa_wp_uninstall() {
 }
 
 function open_csa_wp_unregister_settings() {
-	unregister_setting(OPEN_CSA_WP_OPTIONS_GROUP, 'open-csa-wp-db-version');  
-	delete_option('open-csa-wp-db-version');  
+	unregister_setting(OPEN_CSA_WP_OPTIONS_GROUP, 'open-csa-wp-db-version');
+	delete_option('open-csa-wp-db-version');
 }
 
 ?>
