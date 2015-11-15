@@ -74,9 +74,11 @@ function open_csa_wp_edit_user_properties ($user, $new_user) {
 	wp_enqueue_style('jquery.cluetip.style');
 
 	$csa_data = array();
+	$spot_id_preference = null;
 
 	if (!$new_user)	{
 		$csa_data = get_user_meta( $user->ID, 'open-csa-wp_user', true );
+
 	}
     ?>
 	<h3><?php _e('CSA Properties',OPEN_CSA_WP_DOMAIN); ?></h3>
@@ -224,6 +226,38 @@ function open_csa_wp_edit_user_properties ($user, $new_user) {
 				> <label for="open-csa-wp-administrator_radio"><?php _e('Administrator',OPEN_CSA_WP_DOMAIN);?></label>
 			</td>
 		</tr>
+		<tr>
+			<!-- Here starts the creation of the select element regarding the prefered delivery spot -->
+			<th><?php _e('Delivery Spot Preference',OPEN_CSA_WP_DOMAIN); ?></th>
+			<td>
+				<select
+					id = 'open-csa-wp_user_spot_preference'
+					name = 'open-csa-wp_user_spot_preference'
+				>
+					<option 
+						value = ""
+						<?php 
+							//If we are about to add a new user or we are reviewing a user without a set delivery spot, select the default message
+							if ($new_user || !isset($csa_data['spot'])) {
+								echo 'selected="selected" ';
+							} 
+						?>
+						disabled="disabled"
+					> 
+						<?php
+							_e("select the delivery spot ...",OPEN_CSA_WP_DOMAIN);
+						?>
+					</option>
+					<!-- Populate the options by calling the function 'open_csa_wp_select_delivery_spots', provide delivery spot preference if it is already set-->
+					<?php 
+						if ($selected_csa_data != null && isset($selected_csa_data['spot']))
+							$spot_id_preference = $selected_csa_data['spot'];
+						open_csa_wp_select_delivery_spots($spot_id_preference, '');
+					?>
+				</select>
+
+			</td>
+		</tr>
 	</table>
 <?php
 }
@@ -251,6 +285,10 @@ function open_csa_wp_save_user_properties( $user_id ) {
 		
 	if(!empty( $_POST['open-csa-wp_user_role'] ))	{
 		$csa_data['role'] = sanitize_text_field( $_POST['open-csa-wp_user_role'] );
+	}
+
+	if(!empty( $_POST['open-csa-wp_user_spot_preference'] ))	{
+		$csa_data['spot'] = sanitize_text_field( $_POST['open-csa-wp_user_spot_preference'] );
 	}
 	
 	if(!empty($csa_data)) {
