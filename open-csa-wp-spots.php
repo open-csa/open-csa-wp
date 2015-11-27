@@ -930,17 +930,21 @@ function open_csa_wp_delivery_spots_exist ($personal_order){
 	else return true;	
 }
 
+//Function: open_csa_wp_select_delivery_spots
+//Args: $selected_spot_id <-- a delivery spot id or null
+//      $message <-- A sting to be added to the given spot id option
+//Descr: Populates a select element using the delivery spots in the database as options. 
+//	 If a spot id is provided, it marks as selected and adds a message before the spot name.
 function open_csa_wp_select_delivery_spots($selected_spot_id, $message) {
 	global $wpdb;
 	$deliverySpots = $wpdb->get_results("SELECT id,spot_name FROM ".OPEN_CSA_WP_TABLE_SPOTS." WHERE is_delivery_spot=1");
 	
 	foreach ($deliverySpots as $delivery_spot_id) {
-		if ($delivery_spot_id->id == $selected_spot_id) 								
+		if ($selected_spot_id !== null && $delivery_spot_id->id === $selected_spot_id) 								
 			echo "<option value='".$delivery_spot_id->id."' selected='selected' style='color:black'>". $message. $delivery_spot_id->spot_name ."</option>";
 		else
 			echo "<option value='".$delivery_spot_id->id."' style='color:black'>". $delivery_spot_id->spot_name ."</option>";
 	}
 }
-
 
 ?>

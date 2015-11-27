@@ -9,11 +9,23 @@ function open_csa_wp_show_order_form ($user_id, $spot_id, $delivery_id, $display
 	wp_enqueue_style('jquery.cluetip.style');
 	
 	global $wpdb;
-	
+	$csa_data = null;
+	$spot_id_preference = null;	
+
+	//If it is a personal order, fetch the meta data of the user. Update spot_id with the information from the meta data(Maybe wrong but let's roll with it now)
+	if ($personal_order === true)	{
+		$csa_data = get_user_meta( $user_id, 'open-csa-wp_user', true );
+		if (isset($csa_data['spot']))
+			$spot_id_preference = $csa_data['spot'];
+	}
+
+	//Apo pou erxetai to spot_id?!?! Mporei na erthei apo kapou??? Psajimo
 	if ($spot_id != null) {
 		$spot_info = $wpdb->get_results($wpdb->prepare("SELECT * FROM ". OPEN_CSA_WP_TABLE_SPOTS ." WHERE id=%d", $spot_id))[0];	
 	}
 	
+
+
 	$edit_order_bool = false;
 	$header_text = __("Submit New Order", OPEN_CSA_WP_DOMAIN);
 	if (isset($_POST["open-csa-wp-showEditableUserOrderForm_user_input"]) OR (
@@ -79,19 +91,32 @@ function open_csa_wp_show_order_form ($user_id, $spot_id, $delivery_id, $display
 				
 				<tr valign="top"
 				<?php 
-					if ($user_id == null) {
+					if ($user_id === null) {
 						echo "style = 'display:none'";
 					}
 				?>
 				>
 				<td>
+					<!-- Here starts the creation of the select element regarding the delivery spot -->
 					<select
 						name = 'open-csa-wp-showSelectSpotForm_spot_input'
+						<?php //---[By eliminating this code we can provide to the user the choice to select another delivery spot instead of his prefered one.]---
+							//If there is a delivery spot preference, select the default message
+							if ($spot_id_preference !== null) {
+								echo 'disabled="disabled" ';
+							} 
+						?>
 						onchange = 'getElementById("open-csa-wp-showNewOrderForm_form_id").submit();'
+						
 					>
 						<option 
 							value="" 
-							selected="selected" 
+							<?php 
+								//If a spot_id is not present, select the default message
+								if ($spot_id === null && $spot_id_preference === null) {
+									echo 'selected="selected" ';
+								} 
+							?>
 							disabled="disabled"
 						> 
 						<?php
@@ -103,7 +128,13 @@ function open_csa_wp_show_order_form ($user_id, $spot_id, $delivery_id, $display
 						?>
 						
 						</option>
-						<?php open_csa_wp_select_delivery_spots($spot_id, __("on delivery spot",OPEN_CSA_WP_DOMAIN).": ");?>
+						<!-- Populate the options by calling the function 'open_csa_wp_select_delivery_spots',
+						     provide delivery spot preference(if present) if a spot_id is not provided-->
+						<?php 	
+							if($spot_id === null && $spot_id_preference !== null)
+								$spot_id = $spot_id_preference;
+							open_csa_wp_select_delivery_spots($spot_id, __("on delivery spot",OPEN_CSA_WP_DOMAIN).": ");
+						?>
 					</select>
 				</td>
 				</tr>
